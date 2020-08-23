@@ -6,7 +6,9 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
 const CreateNoteModal = (props) => {
   const {
     buttonLabel,
-    className
+    className,
+    onChange,
+    handleSubmit
   } = props;
 
   const [modal, setModal] = useState(false);
@@ -21,13 +23,15 @@ const CreateNoteModal = (props) => {
         <ModalBody>
             <Form>             
                 <FormGroup>
-                    {/* <Label for="exampleText">My Notes</Label> */}
-                    <Input type="textarea" name="text" id="exampleText" />
+                    <Input type="textarea" name="postText" id="exampleText" onChange={onChange}/>
                 </FormGroup>
             </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={toggle}>Create</Button>{' '}
+          <Button color="primary" onClick={() => {
+              toggle();
+              handleSubmit();
+          }}>Create</Button>{' '}
         </ModalFooter>
       </Modal>
     </div>

@@ -22,6 +22,31 @@ app.use(cors());
 app.get("/", (req, res) => {
     res.json('test')
 })
+
+app.post('/createPost', (req, res) => {
+    const { currentUserID, postText } = req.body;
+    db.transaction(tx => {
+        tx('posts')
+            .returning("*")
+            .insert({
+                post: postText
+            })
+            .then(data => {
+                return tx('users')
+                    .where({id: currentUserID})
+                    .update({comments: tx.raw('array_append(comments, ?)', [data[0].id])})
+                    .returning("*")
+                    .then(updatedUser => {
+                        console.log(updatedUser)
+                        res.json('successfully created post')
+                    })
+            })
+            .then(tx.commit)
+            .catch(tx.rollback)
+    })
+    .catch(err => res.status(400).json("unable to create new post"))  
+})
+
 app.post('/register', (req, res) => {
     const {name, email, password } = req.body;
     const hash = bcrypt.hashSync(password);
@@ -52,12 +77,8 @@ app.post('/register', (req, res) => {
 })
 
 app.post('/signin', (req, res) => {
-    console.log('signing in')
-    console.log(req.body);
     const { email, password } = req.body;
-    console.log(email);
-    console.log(password);
-    // check if email exists in login data table
+    // check if email exists in login data table, then check password with bcrypt
     db('login').where({email: email})
         .select("*")
         .then(user => {
@@ -74,23 +95,8 @@ app.post('/signin', (req, res) => {
             }
         })
         .catch(err => res.status(400).json('Email does not exist'))
-    
-    // check if email and password exists in database, if yes, send user as response
-    // const {email, password } = req.body;
-    // db.select("*").from ("login")
-    //     .where({email:  email})
-    //     .then(data => {
-    //         const isValid = bcrypt.compareSync(password, data[0].hash)
-    //         if(isValid) {
-    //             return db.select("*").from("users")
-    //                 .where({email: email})
-    //                 .then(user => {
-    //                     res.json(user[0])
-    //                 })
-    //                 .catch(err => res.status(400).json("unable to find user"))
-    //         }
-    //     })
-    //     .catch(err => res.status(400).json('wrong credentials'))
 })
+
+
 
 app.listen(3000, () => console.log('Server starting at Port 3000'));
