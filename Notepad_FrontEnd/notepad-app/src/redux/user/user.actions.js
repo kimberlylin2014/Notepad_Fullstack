@@ -26,3 +26,24 @@ export const logOutUser = () => {
         type: userActionTypes.LOGOUT_USER,
     }
 }
+
+export const signInUserStart = (credentials) => {
+    return {
+        type: userActionTypes.SIGNIN_USER_START,
+        payload: credentials
+    }
+}
+
+export const signInUserSuccess = (user) => {
+    return {
+        type: userActionTypes.SIGNIN_USER_SUCCESS,
+        payload: user
+    }
+}
+
+export const signInUserFailure = (error) => {
+    return {
+        type: userActionTypes.SIGNIN_USER_FAILURE,
+        payload: error
+    }
+}

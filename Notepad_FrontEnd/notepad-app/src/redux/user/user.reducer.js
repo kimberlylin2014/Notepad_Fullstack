@@ -9,17 +9,20 @@ const INITIAL_STATE = {
 const userReducer = (state = INITIAL_STATE, action) => {
     switch(action.type) {
         case userActionTypes.REGISTER_USER_START:
+        case userActionTypes.SIGNIN_USER_START:
             return {
                 ...state,
                 isLoading: true
             }
         case userActionTypes.REGISTER_USER_SUCCESS:
+        case userActionTypes.SIGNIN_USER_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 currentUser: action.payload,
             }
         case userActionTypes.REGISTER_USER_FAILURE:
+        case userActionTypes.SIGNIN_USER_FAILURE:
             return {
                 ...state,
                 isLoading: false,

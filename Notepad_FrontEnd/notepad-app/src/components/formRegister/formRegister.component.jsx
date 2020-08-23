@@ -3,6 +3,7 @@ import './formRegister.styles.scss';
 import FormInput from '../formInput/formInput.component';
 import { Form, InputGroup, InputGroupAddon, InputGroupText, Input, Button } from 'reactstrap';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { registerUserStart } from '../../redux/user/user.actions';
 
 class FormRegister extends React.Component {
@@ -48,20 +49,23 @@ class FormRegister extends React.Component {
                         name='name'
                         type='text'
                         onChange={this.handleOnChange}
+                        placeholder='Name'
                     />
                     <InputGroup>
-                        <Input placeholder="new username" onChange={this.handleOnChange} name='email' />
+                        <Input placeholder="username" onChange={this.handleOnChange} name='email' />
                         <InputGroupAddon addonType="append">
                             <InputGroupText>{this.state.emailDomain}</InputGroupText>
                         </InputGroupAddon>
                     </InputGroup>
                     <FormInput
-                        label='Create Password'
+                        // label='Create Password'
                         name='password'
                         type='password'
                         onChange={this.handleOnChange}
+                        placeholder='Create Password'
                     />
                     <Button color="secondary" onClick={this.handleOnSubmit}>Register</Button>
+                    <Link to='/signin'>Sign In</Link>
                 </ Form>
             </div>
         )

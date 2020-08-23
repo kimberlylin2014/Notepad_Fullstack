@@ -8,7 +8,8 @@ import { connect } from 'react-redux';
 // Components
 import FormRegister from './components/formRegister/formRegister.component';
 import Header from './components/header/header.component';
-import HomePageContainer from './pages/homePage/homePage.container'
+import HomePageContainer from './pages/homePage/homePage.container';
+import FormSignIn from './components/formSignIn/formSignIn.component'
 
 class App extends React.Component {
   constructor(props) {
@@ -28,10 +29,13 @@ class App extends React.Component {
         <Header />
         <Switch>
           <Route exact path='/register' render={() => {
-            return currentUser ? <Redirect to='/'/>  : <FormRegister  />
+            return currentUser ? <Redirect to='/'/>  : <FormRegister />
           }}/>
           <Route exact path='/'render={() => {
             return currentUser ? <HomePageContainer /> : <Redirect to='/register' />
+          }} />
+          <Route exact path='/signin'render={() => {
+            return currentUser ? <Redirect to='/'/>  : <FormSignIn />
           }} />
         </Switch>
       </div>

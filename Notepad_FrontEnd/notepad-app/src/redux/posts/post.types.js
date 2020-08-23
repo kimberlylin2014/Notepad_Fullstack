@@ -1,0 +1,7 @@
+const postActionTypes = {
+    CREATE_POST_START: 'CREATE_POST_START',
+    CREATE_POST_SUCCESS: 'CREATE_POST_SUCCESS',
+    CREATE_POST_FAILURE: 'CREATE_POST_FAILURE'
+}
+
+export default postActionTypes;
