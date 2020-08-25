@@ -1,7 +1,7 @@
 import React from 'react';
-import { FormGroup, Label, Input } from 'reactstrap';
+import { FormGroup, Input } from 'reactstrap';
 
-const FormInput = ({label, onChange, name, type, placeholder}) => {
+const FormInput = ({onChange, name, type, placeholder}) => {
     return(
         <div className='FormInput'>
             <br/>

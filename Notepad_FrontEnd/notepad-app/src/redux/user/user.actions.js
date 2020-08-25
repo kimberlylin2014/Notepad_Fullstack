@@ -47,3 +47,17 @@ export const signInUserFailure = (error) => {
         payload: error
     }
 }
+
+export const updateCurrentUserSuccess = (user) => {
+    return {
+        type: userActionTypes.UPDATE_CURRENTUSER_SUCCESS,
+        payload: user
+    }
+}
+
+export const updateCurrentUserFailure = (error) => {
+    return {
+        type: userActionTypes.UPDATE_CURRENTUSER_FAILURE,
+        payload: error
+    }
+}

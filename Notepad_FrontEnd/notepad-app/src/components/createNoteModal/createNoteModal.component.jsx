@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './createNoteModal.styles.scss';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
-        Form, FormGroup, Label, Input, } from 'reactstrap';
+        Form, FormGroup, Input, } from 'reactstrap';
 
 const CreateNoteModal = (props) => {
   const {

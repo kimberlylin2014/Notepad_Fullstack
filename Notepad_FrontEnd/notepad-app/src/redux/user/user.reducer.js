@@ -16,6 +16,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
             }
         case userActionTypes.REGISTER_USER_SUCCESS:
         case userActionTypes.SIGNIN_USER_SUCCESS:
+        case userActionTypes.UPDATE_CURRENTUSER_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
@@ -23,6 +24,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
             }
         case userActionTypes.REGISTER_USER_FAILURE:
         case userActionTypes.SIGNIN_USER_FAILURE:
+        case userActionTypes.UPDATE_CURRENTUSER_FAILURE:
             return {
                 ...state,
                 isLoading: false,

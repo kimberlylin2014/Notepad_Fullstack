@@ -23,8 +23,10 @@ app.get("/", (req, res) => {
     res.json('test')
 })
 
-app.post('/createPost', (req, res) => {
-    const { currentUserID, postText } = req.body;
+
+app.post('/users/:id/createPost', (req, res) => {
+    const currentUserID = req.params.id;
+    const { postText } = req.body;
     db.transaction(tx => {
         tx('posts')
             .returning("*")
@@ -38,7 +40,20 @@ app.post('/createPost', (req, res) => {
                     .returning("*")
                     .then(updatedUser => {
                         console.log(updatedUser)
-                        res.json('successfully created post')
+                        return updatedUser[0]
+                    })
+                    .then(user => {
+                        console.log(user.comments)
+                        tx('posts')
+                            .returning('*')
+                            .whereIn('id', [...user.comments])
+                            .then(posts => {
+                                const info = {
+                                    currentUser: user,
+                                    postArray: posts
+                                }
+                                res.json(info);
+                            })
                     })
             })
             .then(tx.commit)
@@ -53,25 +68,25 @@ app.post('/register', (req, res) => {
     console.log(name + email + hash)
     db.transaction(tx => {
         tx('login')
-        .returning("email")
-        .insert({
-            hash: hash,
-            email: email
-        })
-        .then(loggedEmail => {
-            return tx('users')
-                .returning("*")
-                .insert({
-                    email: loggedEmail[0],
-                    name: name,
-                    joined: new Date(),
-                })
-                .then(user => {
-                    res.json(user[0])
-                })
-        })
-        .then(tx.commit)
-        .catch(tx.rollback)
+            .returning("email")
+            .insert({
+                hash: hash,
+                email: email
+            })
+            .then(loggedEmail => {
+                return tx('users')
+                    .returning("*")
+                    .insert({
+                        email: loggedEmail[0],
+                        name: name,
+                        joined: new Date(),
+                    })
+                    .then(user => {
+                        res.json(user[0])
+                    })
+            })
+            .then(tx.commit)
+            .catch(tx.rollback)
     })
     .catch(error => res.status(400).json("unable to register"))
 })
@@ -79,7 +94,8 @@ app.post('/register', (req, res) => {
 app.post('/signin', (req, res) => {
     const { email, password } = req.body;
     // check if email exists in login data table, then check password with bcrypt
-    db('login').where({email: email})
+    db('login')
+        .where({email: email})
         .select("*")
         .then(user => {
             const isValid = bcrypt.compareSync(password, user[0].hash);
@@ -95,6 +111,42 @@ app.post('/signin', (req, res) => {
             }
         })
         .catch(err => res.status(400).json('Email does not exist'))
+})
+
+/*
+The below route should be:
+/users/:userId/posts
+We want to find a specific user and then find the child component to that user which will be posts
+
+If we wanted to delete a post from the user:
+DELETE /users/:userId/posts/:postId
+
+Or update a post from the user:
+UPDATE /users/:userId/posts/:postId 
+*/
+app.get('/users/:userID/posts', (req, res) => {
+    const { userID } = req.params;
+    console.log(userID)
+    db.transaction(tx => {
+        tx('users')
+            .where({id: userID})
+            .returning('*')
+            .then(data =>{
+                const commentIDs = data[0].comments;
+                return tx('posts')
+                    .returning('*')
+                    .whereIn('id', [...commentIDs])
+                    .then(data => {
+                        res.json(data)
+                    })
+            })
+            .then(tx.commit)
+            .catch(tx.rollback)
+    })
+    .catch(err => console.log(err))
+    
+   
+
 })
 
 

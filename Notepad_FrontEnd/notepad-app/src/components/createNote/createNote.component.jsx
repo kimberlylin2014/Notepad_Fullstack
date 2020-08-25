@@ -5,7 +5,7 @@ import { createPostStart } from '../../redux/posts/post.actions';
 import { connect } from 'react-redux';
 import { selectCurrentUser } from '../../redux/user/user.selectors'
 import { createStructuredSelector } from 'reselect';
-import { select } from 'redux-saga/effects';
+
 class CreateNote extends React.Component {
     constructor(props) {
         super(props)

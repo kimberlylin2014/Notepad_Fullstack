@@ -12,18 +12,8 @@ import HomePageContainer from './pages/homePage/homePage.container';
 import FormSignIn from './components/formSignIn/formSignIn.component'
 
 class App extends React.Component {
-  constructor(props) {
-    super(props)
-  }
   render() {
     const { currentUser } = this.props;
-    let inSession;
-    if(currentUser) {
-      inSession = true;
-    } else {
-      inSession = false;
-    }
-
     return (
       <div className="App">
         <Header />

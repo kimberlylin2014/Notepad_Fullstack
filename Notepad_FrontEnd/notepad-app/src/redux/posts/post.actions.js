@@ -20,3 +20,24 @@ export const createPostFailure = (error) => {
         payload: error
     }
 }
+
+export const getUserPostsStart = (user) => {
+    return {
+        type: postActionTypes.GET_USERPOSTS_START,
+        payload: user
+    }
+}
+
+export const getUserPostsSuccess = (userPosts) => {
+    return {
+        type: postActionTypes.GET_USERPOSTS_SUCCESS,
+        payload: userPosts
+    }
+}
+
+export const getUserPostsFailure = (error) => {
+    return {
+        type: postActionTypes.GET_USERPOSTS_FAILURE,
+        payload: error
+    }
+}

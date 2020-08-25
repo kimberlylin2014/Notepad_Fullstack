@@ -1,6 +1,12 @@
 import userActionTypes from './user.types';
+import postActionTypes from '../posts/post.types';
 import { all, put, takeLatest, call } from 'redux-saga/effects';
-import { registerUserSuccess, registUserFailure, signInUserSuccess, signInUserFailure } from './user.actions';
+import { registerUserSuccess, 
+         registUserFailure, 
+         signInUserSuccess, 
+         signInUserFailure, 
+         updateCurrentUserSuccess, 
+         updateCurrentUserFailure } from './user.actions';
 
 function* registerUser({payload}) {
     try {
@@ -39,8 +45,20 @@ function* onSignInUserStart() {
     yield takeLatest(userActionTypes.SIGNIN_USER_START, signInUser)
 }
 
+function* updateUser({payload}) {
+    try {
+        yield put(updateCurrentUserSuccess(payload.currentUser))
+    } catch(error) {
+        yield put(updateCurrentUserFailure(error.message))
+    }
+}
+
+function* onCreatePostSuccess() {
+    yield takeLatest(postActionTypes.CREATE_POST_SUCCESS, updateUser)
+}
+
 function* userSagas() {
-    yield all([call(onUserRegisterStart), call(onSignInUserStart)])
+    yield all([call(onUserRegisterStart), call(onSignInUserStart), call(onCreatePostSuccess)])
 }
 
 export default userSagas;
