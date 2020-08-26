@@ -100,6 +100,7 @@ app.post('/signin', (req, res) => {
         .then(user => {
             const isValid = bcrypt.compareSync(password, user[0].hash);
             if(isValid) {
+                console.log('is valid')
                 db('users').where({email: email})
                     .select('*')
                     .then(user => {
@@ -107,6 +108,7 @@ app.post('/signin', (req, res) => {
                     })
                     .catch(err => res.status(400).json('unable to send user'))
             } else {
+                console.log('not valid')
                 res.status(400).json("Password incorrect")
             }
         })
@@ -126,7 +128,6 @@ UPDATE /users/:userId/posts/:postId
 */
 app.get('/users/:userID/posts', (req, res) => {
     const { userID } = req.params;
-    console.log(userID)
     db.transaction(tx => {
         tx('users')
             .where({id: userID})
@@ -144,11 +145,35 @@ app.get('/users/:userID/posts', (req, res) => {
             .catch(tx.rollback)
     })
     .catch(err => console.log(err))
-    
-   
-
 })
 
+app.put('/posts/:id/update', (req, res) => {
+    const {postID, text, userID} = req.body;
+    db.transaction(tx => {
+        tx('posts')
+            .where({id: postID})
+            .update({post: text})
+            .returning("*")
+            .then(updatedPost => {
+                console.log(updatedPost)
+                return tx('users')
+                    .where({id: userID})
+                    .returning("*")
+                    .then(foundUser => {
+                        console.log(foundUser)
+                        const commentIDs = foundUser[0].comments;
+                        return tx("posts")
+                        .returning("*")
+                        .whereIn('id', [...commentIDs])
+                        .then(commentArray => {
+                            res.json(commentArray)
+                        })
+                    })
+            })
+            .then(tx.commit)
+            .catch(tx.rollback)
+    })
+})
 
 
 app.listen(3000, () => console.log('Server starting at Port 3000'));

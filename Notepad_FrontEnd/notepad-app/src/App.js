@@ -14,6 +14,7 @@ import FormSignIn from './components/formSignIn/formSignIn.component'
 class App extends React.Component {
   render() {
     const { currentUser } = this.props;
+    console.log(currentUser)
     return (
       <div className="App">
         <Header />

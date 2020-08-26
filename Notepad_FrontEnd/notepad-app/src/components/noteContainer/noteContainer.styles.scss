@@ -1,0 +1,19 @@
+.NoteContainer {
+    width: 50%;
+    border: 1px solid black;
+    margin: 10px auto;
+    padding: 10px;
+    p {
+        text-align: center;
+        padding: 30px 10px 10px;
+    }
+    .header {
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+            margin-right: 3px;
+
+        }
+    }
+}

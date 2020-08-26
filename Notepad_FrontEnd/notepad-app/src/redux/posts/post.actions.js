@@ -41,3 +41,24 @@ export const getUserPostsFailure = (error) => {
         payload: error
     }
 }
+
+export const updatePostStart = (newPostContent) => {
+    return {
+        type: postActionTypes.UPDATE_POST_START,
+        payload: newPostContent
+    }
+}
+
+export const updatePostSuccess = (post) => {
+    return {
+        type: postActionTypes.UPDATE_POST_SUCCESS,
+        payload: post
+    }
+}
+
+export const updatePostFailure = (error) => {
+    return {
+        type: postActionTypes.UPDATE_POST_FAILURE,
+        payload: error
+    }
+}

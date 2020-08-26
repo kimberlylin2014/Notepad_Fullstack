@@ -34,8 +34,12 @@ function* signInUser({payload}) {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(payload)
         })
-        const loggedInUser = yield response.json();
-        yield put(signInUserSuccess(loggedInUser));
+        if(response.ok) {
+            const loggedInUser = yield response.json();
+            yield put(signInUserSuccess(loggedInUser));
+        } else {
+            throw Error('Wrong Credentials')
+        }     
     } catch(error) {
         yield put(signInUserFailure(error.message));
     }

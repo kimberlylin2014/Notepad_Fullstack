@@ -1,5 +1,5 @@
 import postActionTypes from './post.types';
-import { createPostSuccess, createPostFailure, getUserPostsSuccess, getUserPostsFailure } from './post.actions';
+import { createPostSuccess, createPostFailure, getUserPostsSuccess, getUserPostsFailure, updatePostSuccess, updatePostFailure } from './post.actions';
 import { all, call, takeLatest, put } from 'redux-saga/effects';
 
 function* getUserPosts({payload}) {
@@ -38,8 +38,29 @@ function* onCreatePostStart() {
     yield takeLatest(postActionTypes.CREATE_POST_START, createPost)
 }
 
+function* updatePost({payload: {postID, text, userID}}) {
+    try {
+        console.log(text);
+        console.log(postID)
+        console.log(userID)
+        const response = yield fetch(`http://localhost:3000/posts/${postID}/update`, {
+            method: "PUT",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({text, postID, userID})
+        })
+        const userComments = yield response.json();
+        yield put(updatePostSuccess(userComments))
+    } catch(error) {
+        yield put(updatePostFailure(error.message))
+    }
+}
+
+function* onUpdatePostStart() {
+    yield takeLatest(postActionTypes.UPDATE_POST_START, updatePost)
+}
+
 function* postSagas() {
-    yield all([call(onCreatePostStart), call(onGetUserPostsStart)])
+    yield all([call(onCreatePostStart), call(onGetUserPostsStart), call(onUpdatePostStart)])
 }
 
 export default postSagas;

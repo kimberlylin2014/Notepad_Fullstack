@@ -6,3 +6,8 @@ export const selectUserPosts = createSelector(
     [postSelector],
     (post) => post.userPosts
 )
+
+export const selectModalDisplay = createSelector(
+    [postSelector],
+    (post) => post.displayModal
+)
