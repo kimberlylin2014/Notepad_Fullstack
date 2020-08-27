@@ -52,7 +52,7 @@ function* onSignInUserStart() {
 
 function* updateUser({payload}) {
     try {
-        yield put(updateCurrentUserSuccess(payload.currentUser))
+        yield put(updateCurrentUserSuccess(payload.updatedUser))
     } catch(error) {
         yield put(updateCurrentUserFailure(error.message))
     }
@@ -62,17 +62,9 @@ function* onCreatePostSuccess() {
     yield takeLatest(postActionTypes.CREATE_POST_SUCCESS, updateUser)
 }
 
-function* updateUserWithDeletedPost({payload}) {
-    try {
-        console.log(payload)
-        yield put(updateCurrentUserSuccess(payload))
-    } catch(error) {
-        yield put(updateCurrentUserFailure(error.message))
-    }
-}
 
 function* onDeletePostSuccess() {
-    yield takeLatest(postActionTypes.DELETE_POST_SUCCESS, updateUserWithDeletedPost)
+    yield takeLatest(postActionTypes.DELETE_POST_SUCCESS, updateUser)
 }
 
 function* userSagas() {

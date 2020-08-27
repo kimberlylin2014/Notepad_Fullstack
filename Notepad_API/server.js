@@ -102,7 +102,7 @@ app.post('/users/:id/createPost', (req, res) => {
                             .whereIn('id', [...user.comments])
                             .then(posts => {
                                 const info = {
-                                    currentUser: user,
+                                    updatedUser: user,
                                     postArray: posts
                                 }
                                 res.json(info);
@@ -185,7 +185,14 @@ app.delete("/user/:userID/posts/:postID/delete", (req, res) => {
                     .returning("*")
                     .then(user => {
                         console.log(user)
-                        res.json(user[0]);
+                        const commentIDs = user[0].comments;
+                        console.log(commentIDs)
+                        return tx('posts')
+                            .returning('*')
+                            .whereIn('id', [...commentIDs])
+                            .then(comments => {
+                                res.json({comments, updatedUser: user[0]})
+                            })
                     })
             })    
             .then(tx.commit)

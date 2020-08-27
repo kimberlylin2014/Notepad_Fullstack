@@ -18,6 +18,7 @@ class NoteList extends React.Component {
     render() {
         console.log('note list displaying posts')
         const {userPosts, currentUser} = this.props;
+        console.log(userPosts)
         return(
             <div className='NoteList'>
                 <h2>{currentUser.name}'s Notes</h2>

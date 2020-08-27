@@ -31,7 +31,6 @@ function* createPost({payload}){
             body: JSON.stringify(payload)
         });
         const data = yield response.json();
-        console.log(data)
         yield put(createPostSuccess(data))
     } catch(error) {
         yield put(createPostFailure(error.message))
@@ -72,9 +71,8 @@ function* deletePost({payload: {currentUser, postData}}) {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({currentUser, postData})
         })
-        const updatedUser = yield response.json();
-        console.log(updatedUser);
-        yield put(deletePostSuccess(updatedUser))
+        const {comments, updatedUser} = yield response.json();
+        yield put(deletePostSuccess({comments, updatedUser}))
     } catch(error) {
         yield put(deletePostFailure(error.message))
     }
