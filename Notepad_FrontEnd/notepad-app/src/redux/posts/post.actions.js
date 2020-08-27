@@ -49,10 +49,10 @@ export const updatePostStart = (newPostContent) => {
     }
 }
 
-export const updatePostSuccess = (post) => {
+export const updatePostSuccess = (posts) => {
     return {
         type: postActionTypes.UPDATE_POST_SUCCESS,
-        payload: post
+        payload: posts
     }
 }
 
@@ -60,5 +60,26 @@ export const updatePostFailure = (error) => {
     return {
         type: postActionTypes.UPDATE_POST_FAILURE,
         payload: error
+    }
+}
+
+export const deletePostStart = (post) => {
+    return {
+        type: postActionTypes.DELETE_POST_START,
+        payload: post
+    }
+}
+
+export const deletePostSuccess = (updatedPostArray) => {
+    return {
+        type: postActionTypes.DELETE_POST_SUCCESS,
+        payload: updatedPostArray
+    }
+}
+
+export const deletePostFailure = (error) => {
+    return {
+        type: postActionTypes.DELETE_POST_FAILURE,
+        pyalod: error
     }
 }

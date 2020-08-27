@@ -6,7 +6,8 @@ import { registerUserSuccess,
          signInUserSuccess, 
          signInUserFailure, 
          updateCurrentUserSuccess, 
-         updateCurrentUserFailure } from './user.actions';
+         updateCurrentUserFailure,
+        } from './user.actions';
 
 function* registerUser({payload}) {
     try {
@@ -61,8 +62,21 @@ function* onCreatePostSuccess() {
     yield takeLatest(postActionTypes.CREATE_POST_SUCCESS, updateUser)
 }
 
+function* updateUserWithDeletedPost({payload}) {
+    try {
+        console.log(payload)
+        yield put(updateCurrentUserSuccess(payload))
+    } catch(error) {
+        yield put(updateCurrentUserFailure(error.message))
+    }
+}
+
+function* onDeletePostSuccess() {
+    yield takeLatest(postActionTypes.DELETE_POST_SUCCESS, updateUserWithDeletedPost)
+}
+
 function* userSagas() {
-    yield all([call(onUserRegisterStart), call(onSignInUserStart), call(onCreatePostSuccess)])
+    yield all([call(onUserRegisterStart), call(onSignInUserStart), call(onCreatePostSuccess), call(onDeletePostSuccess)])
 }
 
 export default userSagas;

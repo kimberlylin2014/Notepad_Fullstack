@@ -13,6 +13,7 @@ const postReducer = (state = INITIAL_STATE, action) => {
         case postActionTypes.CREATE_POST_START:
         case postActionTypes.GET_USERPOSTS_START:
         case postActionTypes.UPDATE_POST_START:
+        case postActionTypes.DELETE_POST_START:
             return {
                 ...state,
                 isLoading: true
@@ -26,15 +27,24 @@ const postReducer = (state = INITIAL_STATE, action) => {
             }
         case postActionTypes.GET_USERPOSTS_SUCCESS:
         case postActionTypes.UPDATE_POST_SUCCESS:
+   
             return {
                 ...state,
                 isLoading: false,
                 errorMessage: null,
                 userPosts: [...action.payload]
             }
+        case postActionTypes.DELETE_POST_SUCCESS:
+                return {
+                    ...state,
+                    isLoading: false,
+                    errorMessage: null,
+                    userPosts: [...action.payload.comments]
+                }
         case postActionTypes.CREATE_POST_FAILURE:
         case postActionTypes.GET_USERPOSTS_FAILURE:
         case postActionTypes.UPDATE_POST_FAILURE:
+        case postActionTypes.DELETE_POST_FAILURE:
             return {
                 ...state,
                 errorMessage: action.payload,
