@@ -15,12 +15,14 @@ class CreateNote extends React.Component {
         this.handleOnChange = this.handleOnChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
     handleOnChange(e) {
         const { name, value } = e.target;
         this.setState({
          [name]: value
         })
     }
+
     handleSubmit() {
         const { createPostStart, currentUser } = this.props;
         const {postText} = this.state;
@@ -31,9 +33,10 @@ class CreateNote extends React.Component {
         console.log(text)
         createPostStart(text);
     }
+
     render() {
         return(
-            <div className='CreateNote'>
+            <div className='CreateNote container'>
                 <CreateNoteModal buttonLabel='Create' onChange={this.handleOnChange} handleSubmit={this.handleSubmit}/>
             </div>
         )
@@ -49,4 +52,5 @@ const mapDisptachToProps = (dispatch) => {
 const mapStateToProps = createStructuredSelector({
     currentUser: selectCurrentUser
 })
+
 export default connect(mapStateToProps, mapDisptachToProps)(CreateNote);

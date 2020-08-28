@@ -2,7 +2,7 @@ import userActionTypes from './user.types';
 import postActionTypes from '../posts/post.types';
 import { all, put, takeLatest, call } from 'redux-saga/effects';
 import { registerUserSuccess, 
-         registUserFailure, 
+         registerUserFailure, 
          signInUserSuccess, 
          signInUserFailure, 
          updateCurrentUserSuccess, 
@@ -17,10 +17,17 @@ function* registerUser({payload}) {
                             headers: {'Content-Type': "application/json"},
                             body: JSON.stringify(payload)
                         });
-        const user = yield response.json();
-        yield put(registerUserSuccess(user))                      
+        if(response.ok) {
+            const user = yield response.json();
+            console.log(user)
+            console.log('what?')
+            yield put(registerUserSuccess(user));    
+        } else {
+            throw Error('Wrong Credentials')
+        }    
+                        
     } catch(error) {
-        yield put(registUserFailure(error.message))
+        yield put(registerUserFailure(error.message))
     }
 }
 

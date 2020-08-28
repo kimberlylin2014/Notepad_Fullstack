@@ -5,7 +5,6 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter,
 
 const CreateNoteModal = (props) => {
   const {
-    buttonLabel,
     className,
     onChange,
     handleSubmit
@@ -17,9 +16,11 @@ const CreateNoteModal = (props) => {
 
   return (
     <div className='CreateNoteModal'>
-      <Button color="warning" onClick={toggle}>{buttonLabel}</Button>
+      <span className='plus-icon' onClick={toggle} role='img' aria-label='plus'>
+        &#10133; Create New Note
+      </span>
       <Modal isOpen={modal} toggle={toggle} className={className}>
-        <ModalHeader toggle={toggle}>My Notes</ModalHeader>
+        <ModalHeader toggle={toggle}>Write Your Note Here</ModalHeader>
         <ModalBody>
             <Form>             
                 <FormGroup>

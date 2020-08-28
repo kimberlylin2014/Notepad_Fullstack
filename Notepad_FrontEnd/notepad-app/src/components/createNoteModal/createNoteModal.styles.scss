@@ -1,6 +1,17 @@
 .CreateNoteModal {
-    button {
-        width: 100px;
+    // button {
+    //     width: 100px;
+    // }
+    .plus-icon {
+        font-size: 20px;
+        border: 1px solid #393b44;
+        padding: 5px 10px 5px 5px;
+        background-color: #d6e0f0;
+    }
+    .plus-icon:hover {
+        cursor: pointer;
+        background-color: #3286d4;
+        color: #393b44;
     }
 }
 textarea.form-control {

@@ -1,6 +1,5 @@
 import React from 'react';
 import './noteContainer.styles.scss';
-import { Button } from 'reactstrap';
 import EditNoteModal from '../editNoteModal/editNoteModal.component';
 import  {selectCurrentUser} from '../../redux/user/user.selectors';
 import { connect } from 'react-redux';
@@ -8,16 +7,22 @@ import { createStructuredSelector } from 'reselect';
 import { deletePostStart } from '../../redux/posts/post.actions'
 
 const NoteContainer = ({postData, currentUser, deletePostStart}) => {
-    const {id} = postData;
+
     return (
         <div className='NoteContainer'>
             <div className='header'>
                 <EditNoteModal buttonLabel='Edit' postData={postData}/>
-                <Button color="secondary" onClick={() => {
+                <div className='delete-icon' onClick={() => {
                     deletePostStart({currentUser, postData})
-                }}>Delete</Button>
+                }}>
+                     &#10006;
+                </div>
             </div>
-            <p>{postData.post}</p>
+            <div className='text-section'>
+                <p className='note-text'>{postData.post}</p>
+                <p className='timestamp'>Created: {postData.created}</p>
+            </div>
+           
         </div>
     )
 }

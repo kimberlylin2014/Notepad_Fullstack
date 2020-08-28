@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const knex = require('knex');
+const moment = require('moment');
 
 const db = knex({
     client: 'pg',
@@ -36,13 +37,15 @@ app.post('/register', (req, res) => {
             })
             .then(loggedEmail => {
                 return tx('users')
-                    .returning("*")
+                    .returning('*')
                     .insert({
                         email: loggedEmail[0],
                         name: name,
                         joined: new Date(),
                     })
                     .then(user => {
+                        console.log("registered new user")
+                        console.log(user)
                         res.json(user[0])
                     })
             })
@@ -61,7 +64,6 @@ app.post('/signin', (req, res) => {
         .then(user => {
             const isValid = bcrypt.compareSync(password, user[0].hash);
             if(isValid) {
-                console.log('is valid')
                 db('users').where({email: email})
                     .select('*')
                     .then(user => {
@@ -69,7 +71,6 @@ app.post('/signin', (req, res) => {
                     })
                     .catch(err => res.status(400).json('unable to send user'))
             } else {
-                console.log('not valid')
                 res.status(400).json("Password incorrect")
             }
         })
@@ -80,11 +81,15 @@ app.post('/signin', (req, res) => {
 app.post('/users/:id/createPost', (req, res) => {
     const currentUserID = req.params.id;
     const { postText } = req.body;
+    
+    const dateStr = moment().format('ddd M/D/YY h:mma')
+    console.log(dateStr)
     db.transaction(tx => {
         tx('posts')
             .returning("*")
             .insert({
-                post: postText
+                post: postText,
+                created: dateStr
             })
             .then(data => {
                 return tx('users')
@@ -92,15 +97,14 @@ app.post('/users/:id/createPost', (req, res) => {
                     .update({comments: tx.raw('array_append(comments, ?)', [data[0].id])})
                     .returning("*")
                     .then(updatedUser => {
-                        console.log(updatedUser)
                         return updatedUser[0]
                     })
                     .then(user => {
-                        console.log(user.comments)
                         tx('posts')
                             .returning('*')
                             .whereIn('id', [...user.comments])
                             .then(posts => {
+                                console.log(posts)
                                 const info = {
                                     updatedUser: user,
                                     postArray: posts
@@ -126,7 +130,7 @@ app.get('/users/:userID/posts', (req, res) => {
                 const commentIDs = data[0].comments;
                 return tx('posts')
                     .returning('*')
-                    .whereIn('id', [...commentIDs])
+                    .whereIn('id', commentIDs)
                     .then(data => {
                         res.json(data)
                     })
@@ -154,7 +158,7 @@ app.put('/posts/:postID/update', (req, res) => {
                         const commentIDs = foundUser[0].comments;
                         return tx("posts")
                             .returning("*")
-                            .whereIn('id', [...commentIDs])
+                            .whereIn('id', commentIDs)
                             .then(commentArray => {
                                 res.json(commentArray)
                             })

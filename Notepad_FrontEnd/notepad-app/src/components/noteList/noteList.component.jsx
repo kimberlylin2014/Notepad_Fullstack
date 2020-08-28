@@ -11,18 +11,31 @@ class NoteList extends React.Component {
     constructor(props) {
         super(props)
     }
+
     componentDidMount() {
         const { currentUser, getUserPostsStart } = this.props;
-        getUserPostsStart({currentUserID: currentUser.id})
+        console.log(currentUser)
+        if(currentUser.comments) {
+            getUserPostsStart({currentUserID: currentUser.id})
+        }
+        
     }
+
     render() {
-        console.log('note list displaying posts')
         const {userPosts, currentUser} = this.props;
-        console.log(userPosts)
         return(
             <div className='NoteList'>
-                <h2>{currentUser.name}'s Notes</h2>
-                 {userPosts ? userPosts.map(data =>  <NoteContainer key={data.id} postData={data}/>) : ''}
+                  <h2>{currentUser.name}'s Notes</h2>
+                <div className='container'>
+                    <div className='row'>
+                        {userPosts ? userPosts.map(data =>  {
+                            console.log(data.id)
+                               return <div key={data.id} className='col-md-4 col-6 eachRow' >
+                                        <NoteContainer  postData={data}/>
+                                      </div>
+                         }) : ''}
+                    </div>
+                </div>      
             </div>
         )
     }

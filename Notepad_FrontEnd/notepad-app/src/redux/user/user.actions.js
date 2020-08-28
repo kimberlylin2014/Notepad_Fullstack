@@ -14,7 +14,7 @@ export const registerUserSuccess = (user) => {
     }
 }
 
-export const registUserFailure = (error) => {
+export const registerUserFailure = (error) => {
     return {
         type: userActionTypes.REGISTER_USER_FAILURE,
         payload: error

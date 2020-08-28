@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './header.styles.scss';
 import {
   Collapse,
   Navbar,
@@ -20,22 +21,24 @@ const Header = ({logOutUser, history, currentUser}) => {
   const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <div>
-      <Navbar color="dark" dark expand="md">
-        <NavbarBrand href="/">Notepad</NavbarBrand>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="ml-auto" navbar>
-            <NavItem>
-                {currentUser ?  <NavLink onClick={() => {
-                  logOutUser();
-                  history.push('/')
-                }}>Log Out</NavLink> : ""}
-             
-            </NavItem>
+    <div className='Header'>
+      <Navbar color="dark" dark expand="md" >
+        <div className='container'>
+          <NavbarBrand><span role='img' aria-label='brand' className='notepad-icon'>&#9997;</span>Notepad</NavbarBrand>
+          <NavbarToggler onClick={toggle} />
+          <Collapse isOpen={isOpen} navbar>
+            <Nav className="ml-auto" navbar>
+              <NavItem>
+                  {currentUser ?  <NavLink className='logout' onClick={() => {
+                    logOutUser();
+                    history.push('/')
+                  }}>Log Out</NavLink> : ""}
+              
+              </NavItem>
 
-          </Nav>
-        </Collapse>
+            </Nav>
+          </Collapse>
+        </div>
       </Navbar>
     </div>
   );
@@ -50,4 +53,5 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = createStructuredSelector({
     currentUser: selectCurrentUser
 })
+
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

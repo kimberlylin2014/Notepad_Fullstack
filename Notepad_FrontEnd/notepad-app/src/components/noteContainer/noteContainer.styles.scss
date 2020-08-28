@@ -1,19 +1,55 @@
 .NoteContainer {
-    width: 50%;
-    border: 1px solid black;
-    margin: 10px auto;
-    padding: 10px;
-    p {
-        text-align: center;
-        padding: 30px 10px 10px;
+    border: 1px solid #222831;
+    align-items: stretch;
+    min-height: 200px;
+    height: 100%;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.25), 
+        0 2px 2px rgba(0,0,0,0.20), 
+        0 4px 4px rgba(0,0,0,0.15), 
+        0 8px 8px rgba(0,0,0,0.10),
+        0 16px 16px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column; 
+
+    .text-section {
+        text-align: left;
+        font-size: 22px;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+
+        p {
+            margin: 0;
+   
+        }
+        .note-text {
+            font-size: 18px;
+            overflow: hidden;
+            overflow-wrap: break-word;
+        }
+        .timestamp {
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: flex-end;
+    
+        }
     }
     .header {
         display: flex;
         justify-content: flex-end;
-
-        button {
-            margin-right: 3px;
-
+        align-items: center;
+        border-bottom: solid 1px #222831;
+        background-color: #ffd31d;
+        height: 50px;
+        padding-right: 10px;
+    }
+    .delete-icon {
+        font-size: 25px;
+        &:hover {
+            cursor: pointer;
         }
     }
 }
