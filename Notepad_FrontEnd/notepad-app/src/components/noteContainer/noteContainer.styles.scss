@@ -19,22 +19,22 @@
         flex-direction: column;
         justify-content: space-between;
         height: 100%;
-
         p {
             margin: 0;
-   
+
         }
         .note-text {
             font-size: 18px;
             overflow: hidden;
             overflow-wrap: break-word;
+            color: #393e46;
         }
         .timestamp {
-            font-size: 12px;
+            font-size: 15px;
             font-weight: 600;
             display: flex;
             align-items: flex-end;
-    
+            color: #393e46;
         }
     }
     .header {
@@ -51,5 +51,11 @@
         &:hover {
             cursor: pointer;
         }
+    }
+    .modified {
+        color: #ff9a76;
+    }
+    .created {
+        color: #2bb2bb;
     }
 }

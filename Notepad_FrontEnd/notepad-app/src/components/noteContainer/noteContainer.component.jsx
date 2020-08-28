@@ -7,7 +7,7 @@ import { createStructuredSelector } from 'reselect';
 import { deletePostStart } from '../../redux/posts/post.actions'
 
 const NoteContainer = ({postData, currentUser, deletePostStart}) => {
-
+    console.log(postData.modified)
     return (
         <div className='NoteContainer'>
             <div className='header'>
@@ -20,7 +20,7 @@ const NoteContainer = ({postData, currentUser, deletePostStart}) => {
             </div>
             <div className='text-section'>
                 <p className='note-text'>{postData.post}</p>
-                <p className='timestamp'>Created: {postData.created}</p>
+                <p className='timestamp'> {postData.modified ? <span className='modified'>Modified</span> : <span className='created'>Created</span> } : {postData.created}</p>
             </div>
            
         </div>

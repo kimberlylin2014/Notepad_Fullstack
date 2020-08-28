@@ -145,10 +145,14 @@ app.get('/users/:userID/posts', (req, res) => {
 app.put('/posts/:postID/update', (req, res) => {
     const {text, userID} = req.body;
     const {postID} = req.params;
+    const dateStr = moment().format('ddd M/D/YY h:mma')
     db.transaction(tx => {
         tx('posts')
             .where({id: postID})
-            .update({post: text})
+            .update({post: text,
+                    modified: true,
+                    created: dateStr
+            })
             .returning("*")
             .then(updatedPost => {
                 return tx('users')
