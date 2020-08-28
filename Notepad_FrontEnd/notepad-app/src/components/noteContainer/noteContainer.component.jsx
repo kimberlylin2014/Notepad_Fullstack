@@ -20,7 +20,7 @@ const NoteContainer = ({postData, currentUser, deletePostStart}) => {
             </div>
             <div className='text-section'>
                 <p className='note-text'>{postData.post}</p>
-                <p className='timestamp'> {postData.modified ? <span className='modified'>Modified</span> : <span className='created'>Created</span> } : {postData.created}</p>
+                <p className='timestamp'> {postData.modified ? <span className='modified'>Modified</span> : <span className='created'>Created: </span> } &nbsp;{postData.created}</p>
             </div>
            
         </div>

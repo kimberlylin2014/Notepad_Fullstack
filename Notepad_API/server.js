@@ -164,6 +164,9 @@ app.put('/posts/:postID/update', (req, res) => {
                             .returning("*")
                             .whereIn('id', commentIDs)
                             .then(commentArray => {
+                                const newSort = commentArray.sort(function(a, b) { 
+                                    return a.id - b.id;
+                                });
                                 res.json(commentArray)
                             })
                     })
@@ -176,12 +179,8 @@ app.put('/posts/:postID/update', (req, res) => {
 
 app.delete("/user/:userID/posts/:postID/delete", (req, res) => {
     const { postID, userID } = req.params;
-    console.log(userID)
-    console.log(postID)
     const { currentUser, postData } = req.body;
-    console.log(currentUser.comments)
     const updatedCommentsArray = currentUser.comments.filter(post => post !== postID)
-    console.log(updatedCommentsArray)
     db.transaction(tx => {
         tx('posts')
             .where({id: postID})
@@ -192,9 +191,7 @@ app.delete("/user/:userID/posts/:postID/delete", (req, res) => {
                     .update({comments: updatedCommentsArray})
                     .returning("*")
                     .then(user => {
-                        console.log(user)
                         const commentIDs = user[0].comments;
-                        console.log(commentIDs)
                         return tx('posts')
                             .returning('*')
                             .whereIn('id', [...commentIDs])
