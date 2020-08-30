@@ -132,7 +132,10 @@ app.get('/users/:userID/posts', (req, res) => {
                     .returning('*')
                     .whereIn('id', commentIDs)
                     .then(data => {
-                        res.json(data)
+                        const newSort = data.sort(function(a, b) { 
+                            return a.id - b.id;
+                        });
+                        res.json(newSort)
                     })
             })
             .then(tx.commit)
@@ -167,7 +170,7 @@ app.put('/posts/:postID/update', (req, res) => {
                                 const newSort = commentArray.sort(function(a, b) { 
                                     return a.id - b.id;
                                 });
-                                res.json(commentArray)
+                                res.json(newSort)
                             })
                     })
             })
@@ -196,7 +199,10 @@ app.delete("/user/:userID/posts/:postID/delete", (req, res) => {
                             .returning('*')
                             .whereIn('id', [...commentIDs])
                             .then(comments => {
-                                res.json({comments, updatedUser: user[0]})
+                                const newSort = comments.sort(function(a, b) { 
+                                    return a.id - b.id;
+                                });
+                                res.json({comments: newSort, updatedUser: user[0]})
                             })
                     })
             })    
