@@ -3,8 +3,11 @@ import './formRegister.styles.scss';
 import FormInput from '../formInput/formInput.component';
 import { Form, InputGroup, InputGroupAddon, InputGroupText, Input, Button } from 'reactstrap';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { registerUserStart } from '../../redux/user/user.actions';
+import { registerUserStart, clearUserFormError } from '../../redux/user/user.actions';
+import ValidationMessage from '../validationMessage/validationMessage.component';
+import  { selectUserErrorMessage } from '../../redux/user/user.selectors';
+import { createStructuredSelector } from 'reselect';
+import { withRouter } from 'react-router-dom';
 
 class FormRegister extends React.Component {
     constructor(props){
@@ -17,6 +20,7 @@ class FormRegister extends React.Component {
         }
         this.handleOnChange = this.handleOnChange.bind(this);
         this.handleOnSubmit = this.handleOnSubmit.bind(this);
+        this.handleClickRouterLink = this.handleClickRouterLink.bind(this);
     }
 
     handleOnChange(e) {
@@ -39,7 +43,14 @@ class FormRegister extends React.Component {
         registerUserStart(registerInfo);
     }
 
+    handleClickRouterLink() {
+        const { clearUserFormError, history } = this.props;
+        history.push('/signin');
+        clearUserFormError();
+    }
+
     render() {
+        const { userErrorMessage, clearUserFormError } = this.props;
         return (
             <div className='FormRegister'>
                 <h3>Register</h3>
@@ -64,8 +75,17 @@ class FormRegister extends React.Component {
                         onChange={this.handleOnChange}
                         placeholder='Create Password'
                     />
-                    <Button color="secondary" onClick={this.handleOnSubmit}>Register</Button>
-                    <Link to='/signin'>Sign In</Link>
+                    {userErrorMessage ? 
+                    (<ValidationMessage color='#ec0101'>
+                         <p className='m-0'>{userErrorMessage}</p> 
+                    </ValidationMessage>) : ""}
+                    {userErrorMessage ? 
+                    (<ValidationMessage color='#40a8c4'>
+                         <p className='m-0'>Name needs a minimum of 2 characters.</p> 
+                         <p>Username and Password need a minimum of 5 characters.</p> 
+                    </ValidationMessage>) : ""}
+                    <Button color="secondary" className='mr-2' onClick={this.handleOnSubmit}>Register</Button>
+                    <Button color="primary" onClick={this.handleClickRouterLink}>Sign In</Button>
                 </ Form>
             </div>
         )
@@ -74,8 +94,13 @@ class FormRegister extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        registerUserStart: (credentials) => dispatch(registerUserStart(credentials))
+        registerUserStart: (credentials) => dispatch(registerUserStart(credentials)),
+        clearUserFormError: () => dispatch(clearUserFormError())
     }
 }
 
-export default connect(null, mapDispatchToProps)(FormRegister);
+const mapStateToProps =  createStructuredSelector({
+    userErrorMessage: selectUserErrorMessage
+})
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FormRegister));

@@ -32,6 +32,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
                 errorMessage: action.payload
             }
         case userActionTypes.LOGOUT_USER:
+        case userActionTypes.CLEAR_USERFORM_ERROR:
             return {
                 currentUser: null,
                 isLoading: false,

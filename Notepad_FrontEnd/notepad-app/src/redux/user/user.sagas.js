@@ -9,23 +9,25 @@ import { registerUserSuccess,
          updateCurrentUserFailure,
         } from './user.actions';
 
-function* registerUser({payload}) {
+function* registerUser({payload}) {    
     try {
-        const response = yield fetch('http://localhost:3000/register', 
-                        {
-                            method: "POST",
-                            headers: {'Content-Type': "application/json"},
-                            body: JSON.stringify(payload)
-                        });
-        if(response.ok) {
-            const user = yield response.json();
-            console.log(user)
-            console.log('what?')
-            yield put(registerUserSuccess(user));    
+        const { email, name, password } = payload;
+        if (name.length < 2 || email.length < 17 || password.length < 5){
+            throw Error('Please Check Form Requirements.');
         } else {
-            throw Error('Wrong Credentials')
-        }    
-                        
+            const response = yield fetch('http://localhost:3000/register', 
+            {
+                method: "POST",
+                headers: {'Content-Type': "application/json"},
+                body: JSON.stringify(payload)
+            });
+            if(response.ok) {
+                const user = yield response.json();
+                yield put(registerUserSuccess(user));    
+            } else {
+                throw Error('Unable to Register.');
+            }    
+        }                
     } catch(error) {
         yield put(registerUserFailure(error.message))
     }

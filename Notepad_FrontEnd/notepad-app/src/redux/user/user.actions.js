@@ -61,3 +61,9 @@ export const updateCurrentUserFailure = (error) => {
         payload: error
     }
 }
+
+export const clearUserFormError = () => {
+    return {
+        type: userActionTypes.CLEAR_USERFORM_ERROR
+    }
+}

@@ -3,8 +3,11 @@ import './formSignIn.styles.scss';
 import FormInput from '../formInput/formInput.component';
 import { Form, InputGroup, InputGroupAddon, InputGroupText, Input, Button } from 'reactstrap';
 import { connect } from 'react-redux';
-import { signInUserStart } from '../../redux/user/user.actions'
-import { Link } from 'react-router-dom';
+import { signInUserStart, clearUserFormError } from '../../redux/user/user.actions'
+import ValidationMessage from '../validationMessage/validationMessage.component';
+import { selectUserErrorMessage } from '../../redux/user/user.selectors';
+import { createStructuredSelector } from 'reselect'; 
+import { withRouter } from 'react-router-dom';
 
 class FormSignIn extends React.Component {
     constructor(props){
@@ -16,6 +19,7 @@ class FormSignIn extends React.Component {
         }
         this.handleOnChange = this.handleOnChange.bind(this);
         this.handleOnSubmit = this.handleOnSubmit.bind(this);
+        this.handleClickRouterLink = this.handleClickRouterLink.bind(this);
     }
 
     handleOnChange(e) {
@@ -37,7 +41,14 @@ class FormSignIn extends React.Component {
         signInUserStart(registerInfo);
     }
 
+    handleClickRouterLink() {
+        const { clearUserFormError, history } = this.props;
+        history.push('/register')
+        clearUserFormError();
+    }
+
     render() {
+        const { userErrorMessage } = this.props;
         return (
             <div className='FormSignIn'>
                 <h3 className='mb-4'>Sign In</h3>
@@ -54,9 +65,14 @@ class FormSignIn extends React.Component {
                         onChange={this.handleOnChange}
                         placeholder='password'
                     />
-                    <Button color="secondary" onClick={this.handleOnSubmit}>Sign In</Button>
-                    <Link to='/register'>Register</Link>
+                    {userErrorMessage ? 
+                    (<ValidationMessage color='#ec0101'>
+                         <p>{userErrorMessage}</p> 
+                    </ValidationMessage>) : ""}
+                    <Button color="secondary" className='mr-2' onClick={this.handleOnSubmit}>Sign In</Button>
+                    <Button color="primary" onClick={this.handleClickRouterLink}>Register</Button>
                 </ Form>
+
             </div>
         )
     }
@@ -64,8 +80,13 @@ class FormSignIn extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        signInUserStart: (credentials) => dispatch(signInUserStart(credentials))
+        signInUserStart: (credentials) => dispatch(signInUserStart(credentials)),
+        clearUserFormError: () => dispatch(clearUserFormError())
     }
 }
 
-export default connect(null, mapDispatchToProps)(FormSignIn);
+const mapStateToProps = createStructuredSelector({
+    userErrorMessage: selectUserErrorMessage
+})
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FormSignIn));

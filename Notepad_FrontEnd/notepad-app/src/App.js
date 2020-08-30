@@ -6,10 +6,10 @@ import { selectCurrentUser } from './redux/user/user.selectors'
 import { connect } from 'react-redux';
 
 // Components
-import FormRegister from './components/formRegister/formRegister.component';
+import FormRegisterContainer from './components/formRegister/formRegister.container';
 import Header from './components/header/header.component';
-import HomePageContainer from './pages/homePage/homePage.container';
-import FormSignIn from './components/formSignIn/formSignIn.component'
+import HomePage from './pages/homePage/homePage.component';
+import FormSignInContainer from './components/formSignIn/formSignIn.container'
 
 class App extends React.Component {
   render() {
@@ -19,14 +19,14 @@ class App extends React.Component {
       <div className="App">
         <Header />
         <Switch>
-          <Route exact path='/register' render={() => {
-            return currentUser ? <Redirect to='/'/>  : <FormRegister />
+          <Route exact path='/register' render={(props) => {
+            return currentUser ? <Redirect to='/'/>  : <FormRegisterContainer {...props} />
           }}/>
           <Route exact path='/'render={() => {
-            return currentUser ? <HomePageContainer /> : <Redirect to='/register' />
+            return currentUser ? <HomePage /> : <Redirect to='/register' />
           }} />
-          <Route exact path='/signin'render={() => {
-            return currentUser ? <Redirect to='/'/>  : <FormSignIn />
+          <Route exact path='/signin'render={(props) => {
+            return currentUser ? <Redirect to='/'/>  : <FormSignInContainer {...props}/>
           }} />
         </Switch>
       </div>

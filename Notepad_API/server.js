@@ -6,6 +6,10 @@ const bodyParser = require('body-parser');
 const knex = require('knex');
 const moment = require('moment');
 
+const register = require('./controllers/register');
+const signIn = require('./controllers/signIn');
+const post = require('./controllers/post')
+
 const db = knex({
     client: 'pg',
     connection: {
@@ -20,197 +24,34 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-    res.json('test')
-})
-
-// Register User
+// REGISTER USER
 app.post('/register', (req, res) => {
-    const {name, email, password } = req.body;
-    const hash = bcrypt.hashSync(password);
-    db.transaction(tx => {
-        tx('login')
-            .returning("email")
-            .insert({
-                hash: hash,
-                email: email
-            })
-            .then(loggedEmail => {
-                return tx('users')
-                    .returning('*')
-                    .insert({
-                        email: loggedEmail[0],
-                        name: name,
-                        joined: new Date(),
-                    })
-                    .then(user => {
-                        console.log("registered new user")
-                        console.log(user)
-                        res.json(user[0])
-                    })
-            })
-            .then(tx.commit)
-            .catch(tx.rollback)
-    })
-    .catch(error => res.status(400).json("unable to register"))
+    return register.handleRegister(req, res, db, bcrypt);
 })
 
 // SIGN IN USER AND VALIDATE IF USER EXISTS IN DATABASE
 app.post('/signin', (req, res) => {
-    const { email, password } = req.body;
-    db('login')
-        .where({email: email})
-        .select("*")
-        .then(user => {
-            const isValid = bcrypt.compareSync(password, user[0].hash);
-            if(isValid) {
-                db('users').where({email: email})
-                    .select('*')
-                    .then(user => {
-                        res.json(user[0])
-                    })
-                    .catch(err => res.status(400).json('unable to send user'))
-            } else {
-                res.status(400).json("Password incorrect")
-            }
-        })
-        .catch(err => res.status(400).json('Email does not exist'))
+    return signIn.handleSignIn(req, res, db, bcrypt);
 });
 
 // CREATE NEW POST
 app.post('/users/:id/createPost', (req, res) => {
-    const currentUserID = req.params.id;
-    const { postText } = req.body;
-    
-    const dateStr = moment().format('ddd M/D/YY h:mma')
-    console.log(dateStr)
-    db.transaction(tx => {
-        tx('posts')
-            .returning("*")
-            .insert({
-                post: postText,
-                created: dateStr
-            })
-            .then(data => {
-                return tx('users')
-                    .where({id: currentUserID})
-                    .update({comments: tx.raw('array_append(comments, ?)', [data[0].id])})
-                    .returning("*")
-                    .then(updatedUser => {
-                        return updatedUser[0]
-                    })
-                    .then(user => {
-                        tx('posts')
-                            .returning('*')
-                            .whereIn('id', [...user.comments])
-                            .then(posts => {
-                                console.log(posts)
-                                const info = {
-                                    updatedUser: user,
-                                    postArray: posts
-                                }
-                                res.json(info);
-                            })
-                    })
-            })
-            .then(tx.commit)
-            .catch(tx.rollback)
-    })
-    .catch(err => res.status(400).json("unable to create new post"))  
+    return post.handleCreatePost(req, res, db, moment);
 })
 
 // GET ALL USER POSTS
 app.get('/users/:userID/posts', (req, res) => {
-    const { userID } = req.params;
-    db.transaction(tx => {
-        tx('users')
-            .where({id: userID})
-            .returning('*')
-            .then(data =>{
-                const commentIDs = data[0].comments;
-                return tx('posts')
-                    .returning('*')
-                    .whereIn('id', commentIDs)
-                    .then(data => {
-                        const newSort = data.sort(function(a, b) { 
-                            return a.id - b.id;
-                        });
-                        res.json(newSort)
-                    })
-            })
-            .then(tx.commit)
-            .catch(tx.rollback)
-    })
-    .catch(err => console.log(err))
+    return post.handleGetPosts(req, res, db)
 })
 
 // UPDATE POST BY POST ID
 app.put('/posts/:postID/update', (req, res) => {
-    const {text, userID} = req.body;
-    const {postID} = req.params;
-    const dateStr = moment().format('ddd M/D/YY h:mma')
-    db.transaction(tx => {
-        tx('posts')
-            .where({id: postID})
-            .update({post: text,
-                    modified: true,
-                    created: dateStr
-            })
-            .returning("*")
-            .then(updatedPost => {
-                return tx('users')
-                    .where({id: userID})
-                    .returning("*")
-                    .then(foundUser => {
-                        const commentIDs = foundUser[0].comments;
-                        return tx("posts")
-                            .returning("*")
-                            .whereIn('id', commentIDs)
-                            .then(commentArray => {
-                                const newSort = commentArray.sort(function(a, b) { 
-                                    return a.id - b.id;
-                                });
-                                res.json(newSort)
-                            })
-                    })
-            })
-            .then(tx.commit)
-            .catch(tx.rollback)
-    })
-    .catch(error => res.status(400).json("unable to update post"))
+    return post.handleUpdatePost(req, res, db, moment);
 })
 
+// DELETE POST BY POST ID
 app.delete("/user/:userID/posts/:postID/delete", (req, res) => {
-    const { postID, userID } = req.params;
-    const { currentUser, postData } = req.body;
-    const updatedCommentsArray = currentUser.comments.filter(post => post !== postID)
-    db.transaction(tx => {
-        tx('posts')
-            .where({id: postID})
-            .del()
-            .then(deletedPost => {
-               return tx('users')
-                    .where({id: userID})
-                    .update({comments: updatedCommentsArray})
-                    .returning("*")
-                    .then(user => {
-                        const commentIDs = user[0].comments;
-                        return tx('posts')
-                            .returning('*')
-                            .whereIn('id', [...commentIDs])
-                            .then(comments => {
-                                const newSort = comments.sort(function(a, b) { 
-                                    return a.id - b.id;
-                                });
-                                res.json({comments: newSort, updatedUser: user[0]})
-                            })
-                    })
-            })    
-            .then(tx.commit)
-            .catch(tx.rollback)
-           
-    })
-    .catch(error => console.log(error))
+    return post.handleDeletePost(req, res, db)
 })
 
 app.listen(3000, () => console.log('Server starting at Port 3000'));
