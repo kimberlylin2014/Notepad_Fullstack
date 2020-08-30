@@ -2,14 +2,14 @@ import React from 'react';
 import { Spinner } from 'reactstrap';
 import './withSpinner.styles.scss';
 
-const WithSpinner = (WrappedComponent) => {
-    const componentWithSpinner = ({isLoading}) => {
+const WithSpinner = (WrappedComponent, height) => {
+    const componentWithSpinner = ({isLoading, ...props}) => {
         return isLoading ? (
-            <div className='PageWithSpinner'>
+            <div className='PageWithSpinner' style={{height: height}}>
                 <Spinner style={{ width: '5rem', height: '5rem' }} color="dark" />
             </div>
         ) : (
-            <WrappedComponent />
+            <WrappedComponent {...props}/>
         )
     }
     return componentWithSpinner;

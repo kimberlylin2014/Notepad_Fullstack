@@ -1,15 +1,15 @@
 import React from 'react';
-import './noteContainer.styles.scss';
+import './noteCard.styles.scss';
 import EditNoteModal from '../editNoteModal/editNoteModal.component';
 import  {selectCurrentUser} from '../../redux/user/user.selectors';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { deletePostStart } from '../../redux/posts/post.actions'
 
-const NoteContainer = ({postData, currentUser, deletePostStart}) => {
+const NoteCard = ({postData, currentUser, deletePostStart}) => {
     console.log(postData.modified)
     return (
-        <div className='NoteContainer'>
+        <div className='NoteCard'>
             <div className='header'>
                 <EditNoteModal buttonLabel='Edit' postData={postData}/>
                 <div className='delete-icon' onClick={() => {
@@ -36,4 +36,4 @@ const mapDispatchToProps = (dispatch) => {
         deletePostStart: (postData) => dispatch(deletePostStart(postData))
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(NoteContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(NoteCard);

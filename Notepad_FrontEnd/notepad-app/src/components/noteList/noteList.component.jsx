@@ -5,7 +5,7 @@ import { selectUserPosts } from '../../redux/posts/post.selectors'
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { getUserPostsStart } from '../../redux/posts/post.actions';
-import NoteContainer from '../../components/noteContainer/noteContainer.component';
+import NoteCardContainer from '../../components/noteCard/noteCard.container';
 
 class NoteList extends React.Component {
     constructor(props) {
@@ -17,21 +17,20 @@ class NoteList extends React.Component {
         console.log(currentUser)
         if(currentUser.comments) {
             getUserPostsStart({currentUserID: currentUser.id})
-        }
-        
+        }   
     }
 
     render() {
         const {userPosts, currentUser} = this.props;
+        const listHeader = userPosts.length === 0 ? "Add A Note!" : `${currentUser.name}'s Notes`
         return(
             <div className='NoteList'>
-                  <h2>{currentUser.name}'s Notes</h2>
+                  <h2>{listHeader}</h2>
                 <div className='container'>
                     <div className='row'>
                         {userPosts ? userPosts.map(data =>  {
-                            console.log(data.id)
                                return <div key={data.id} className='col-md-4 col-6 eachRow' >
-                                        <NoteContainer  postData={data}/>
+                                        <NoteCardContainer postData={data}/>
                                       </div>
                          }) : ''}
                     </div>

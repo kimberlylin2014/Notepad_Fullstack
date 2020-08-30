@@ -11,3 +11,8 @@ export const selectModalDisplay = createSelector(
     [postSelector],
     (post) => post.displayModal
 )
+
+export const selectIsUserPostLoading = createSelector(
+    [postSelector],
+    (post) => post.isLoading
+)

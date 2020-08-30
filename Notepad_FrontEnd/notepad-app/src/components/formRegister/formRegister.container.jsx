@@ -8,6 +8,6 @@ const mapStateToProps = createStructuredSelector({
     isLoading: selectIsUserLoading
 })
 
-const FormRegisterContainer = connect(mapStateToProps)(WithSpinner(FormRegister));
+const FormRegisterContainer = connect(mapStateToProps)(WithSpinner(FormRegister, '90vh'));
 
 export default FormRegisterContainer;
