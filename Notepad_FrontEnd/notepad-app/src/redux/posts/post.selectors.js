@@ -16,3 +16,8 @@ export const selectIsUserPostLoading = createSelector(
     [postSelector],
     (post) => post.isLoading
 )
+
+export const selectPostError = createSelector(
+    [postSelector],
+    (post) => post.errorMessage
+)

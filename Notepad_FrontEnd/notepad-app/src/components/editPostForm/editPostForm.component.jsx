@@ -1,9 +1,10 @@
 import React from 'react';
 import { Form, FormGroup, Input, Button} from 'reactstrap';
-import { updatePostStart } from '../../redux/posts/post.actions';
+import { updatePostStart, updatePostFailure } from '../../redux/posts/post.actions';
 import { connect } from 'react-redux';
 import { selectCurrentUser  } from '../../redux/user/user.selectors';
 import { createStructuredSelector } from 'reselect';
+import { selectPostError } from '../../redux/posts/post.selectors'
 
 class EditPostForm extends React.Component {
     constructor(props) {
@@ -25,28 +26,38 @@ class EditPostForm extends React.Component {
 
     handleUpdateClick() {
         const { text, postID } = this.state;
-        const { updatePostStart, currentUser} = this.props;
-        const newPostData = {
-            text,
-            postID,
-            userID: currentUser.id
+        const { updatePostStart, updatePostFailure, currentUser, postData, toggle} = this.props;
+        console.log(postData.post)
+        if(postData.post !== this.state.text) {
+            const newPostData = {
+                text,
+                postID,
+                userID: currentUser.id
+            }
+            toggle()
+            updatePostStart(newPostData);
+        } else {
+            updatePostFailure('No changes were detected!')
+            console.log('nothing to update')
         }
-        updatePostStart(newPostData);
     }
-
+    
     render() {
-        const {toggle} = this.props;
+        const { postError } = this.props;
+        let warning;
+        if(postError) {
+            warning = 'You didn\'t make any changes'
+        }
         return(
             <div className='EditPostForm'>
                 <Form>
                     <FormGroup>
                         <Input type="textarea" name="text" onChange={this.handleOnChange} value={this.state.text}/>
                     </FormGroup>
-
                 </Form>
+                <p style={{color: '#5eaaa8'}}>{warning}</p>
                 <Button color="info" onClick={()=> {
                     this.handleUpdateClick()
-                    toggle()
                 }} >Update</Button>
             </div>
         )
@@ -55,11 +66,14 @@ class EditPostForm extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updatePostStart: (newPostData) => dispatch(updatePostStart(newPostData))
+        updatePostStart: (newPostData) => dispatch(updatePostStart(newPostData)),
+        updatePostFailure: (errorMessage) => dispatch(updatePostFailure(errorMessage))
     }
 }
 
 const mapStateToProps = createStructuredSelector({
-    currentUser: selectCurrentUser
+    currentUser: selectCurrentUser,
+    postError: selectPostError
 })
+
 export default connect(mapStateToProps, mapDispatchToProps)(EditPostForm);

@@ -21,11 +21,12 @@ class NoteList extends React.Component {
     }
 
     render() {
-        const {userPosts, currentUser} = this.props;
-        const listHeader = userPosts.length === 0 ? "Add A Note!" : `${currentUser.name}'s Notes`
+        let {userPosts, currentUser : {name}} = this.props;
+        name = name[0].toUpperCase() + name.slice(1);
+        const listHeader = userPosts.length === 0 ? "Add A Note!" : `${name}'s Notes`
         return(
             <div className='NoteList'>
-                  <h2>{listHeader}</h2>
+                <h2>{listHeader}</h2>
                 <div className='container'>
                     <div className='row'>
                         {userPosts ? userPosts.map(data =>  {
