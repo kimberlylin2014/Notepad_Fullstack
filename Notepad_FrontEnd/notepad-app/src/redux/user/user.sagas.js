@@ -13,7 +13,7 @@ function* registerUser({payload}) {
     try {
         const { email, name, password } = payload;
         if (name.length < 2 || email.length < 17 || password.length < 5){
-            throw Error('Please Check Form Requirements.');
+            throw Error('Please Check Form Requirements');
         } else {
             const response = yield fetch('http://localhost:3000/register', 
             {
@@ -21,11 +21,12 @@ function* registerUser({payload}) {
                 headers: {'Content-Type': "application/json"},
                 body: JSON.stringify(payload)
             });
+            console.log(response)
             if(response.ok) {
                 const user = yield response.json();
                 yield put(registerUserSuccess(user));    
             } else {
-                throw Error('Unable to Register.');
+                throw Error('User already exists');
             }    
         }                
     } catch(error) {

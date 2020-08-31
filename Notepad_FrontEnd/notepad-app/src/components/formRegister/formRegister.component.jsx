@@ -50,7 +50,7 @@ class FormRegister extends React.Component {
     }
 
     render() {
-        const { userErrorMessage, clearUserFormError } = this.props;
+        const { userErrorMessage } = this.props;
         return (
             <div className='FormRegister'>
                 <h3>Register</h3>
@@ -77,9 +77,9 @@ class FormRegister extends React.Component {
                     />
                     {userErrorMessage ? 
                     (<ValidationMessage color='#ec0101'>
-                         <p className='m-0'>{userErrorMessage}</p> 
+                         <p className='mb-3'>{userErrorMessage}</p> 
                     </ValidationMessage>) : ""}
-                    {userErrorMessage ? 
+                    {userErrorMessage === "Please Check Form Requirements" ? 
                     (<ValidationMessage color='#40a8c4'>
                          <p className='m-0'>Name needs a minimum of 2 characters.</p> 
                          <p>Username and Password need a minimum of 5 characters.</p> 

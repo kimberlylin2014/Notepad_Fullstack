@@ -3,7 +3,6 @@ const handleCreatePost = (req, res, db, moment) => {
     const { postText } = req.body;
     
     const dateStr = moment().format('ddd M/D/YY h:mma')
-    console.log(dateStr)
     db.transaction(tx => {
         tx('posts')
             .returning("*")
@@ -24,7 +23,6 @@ const handleCreatePost = (req, res, db, moment) => {
                             .returning('*')
                             .whereIn('id', [...user.comments])
                             .then(posts => {
-                                console.log(posts)
                                 const info = {
                                     updatedUser: user,
                                     postArray: posts
@@ -81,13 +79,17 @@ const handleUpdatePost = (req, res, db, moment) => {
                     .returning("*")
                     .then(foundUser => {
                         const commentIDs = foundUser[0].comments;
+                        console.log('commentIDS')
+                        console.log(commentIDs)
                         return tx("posts")
                             .returning("*")
                             .whereIn('id', commentIDs)
                             .then(commentArray => {
+                                console.log(commentArray)
                                 const newSort = commentArray.sort(function(a, b) { 
                                     return a.id - b.id;
                                 });
+                                console.log(newSort)
                                 res.json(newSort)
                             })
                     })

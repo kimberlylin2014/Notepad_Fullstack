@@ -5,7 +5,7 @@ import { selectUserPosts } from '../../redux/posts/post.selectors'
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { getUserPostsStart } from '../../redux/posts/post.actions';
-import NoteCardContainer from '../../components/noteCard/noteCard.container';
+import NoteCard from '../../components/noteCard/noteCard.component';
 
 class NoteList extends React.Component {
     constructor(props) {
@@ -31,7 +31,7 @@ class NoteList extends React.Component {
                     <div className='row'>
                         {userPosts ? userPosts.map(data =>  {
                                return <div key={data.id} className='col-md-4 col-6 eachRow' >
-                                        <NoteCardContainer postData={data}/>
+                                        <NoteCard postData={data}/>
                                       </div>
                          }) : ''}
                     </div>
