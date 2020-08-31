@@ -5,6 +5,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const knex = require('knex');
 const moment = require('moment');
+const { check, validationResult } = require('express-validator')
 
 const register = require('./controllers/register');
 const signIn = require('./controllers/signIn');
@@ -25,8 +26,16 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // REGISTER USER
-app.post('/register', (req, res) => {
-    return register.handleRegister(req, res, db, bcrypt);
+app.post('/register', [
+    check('name', 'Name is required')
+        .not()
+        .isEmpty(),
+    check('email', 'Please include a valid email')
+        .isEmail(),
+    check('password', 'Please enter a password with 6 or more characters')
+        .isLength({min: 5})
+], (req, res) => {
+    return register.handleRegister(req, res, db, bcrypt, validationResult);
 })
 
 // SIGN IN USER AND VALIDATE IF USER EXISTS IN DATABASE

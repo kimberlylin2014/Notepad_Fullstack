@@ -1,4 +1,12 @@
-const handleRegister = (req, res, db, bcrypt) => { 
+const { validationResult } = require("express-validator");
+
+const handleRegister = (req, res, db, bcrypt, validationResult) => {
+    const errors = validationResult(req); 
+    if(!errors.isEmpty()) {
+        console.log('found errors')
+        return res.status(400).json('Check Form Requirements')
+    }
+    console.log("no validation errors")
     const {name, email, password } = req.body;
     const hash = bcrypt.hashSync(password);
     db.transaction(tx => {
