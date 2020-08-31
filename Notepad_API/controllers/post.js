@@ -79,17 +79,13 @@ const handleUpdatePost = (req, res, db, moment) => {
                     .returning("*")
                     .then(foundUser => {
                         const commentIDs = foundUser[0].comments;
-                        console.log('commentIDS')
-                        console.log(commentIDs)
                         return tx("posts")
                             .returning("*")
                             .whereIn('id', commentIDs)
                             .then(commentArray => {
-                                console.log(commentArray)
                                 const newSort = commentArray.sort(function(a, b) { 
                                     return a.id - b.id;
                                 });
-                                console.log(newSort)
                                 res.json(newSort)
                             })
                     })
