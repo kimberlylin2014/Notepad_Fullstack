@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test if Note Card component is rendering 1`] = `
+<div
+  className="NoteCard"
+>
+  <div
+    className="header"
+  >
+    <EditNoteModal
+      buttonLabel="Edit"
+      postData={
+        Object {
+          "created": "Sun 9/6/20 5:24pm",
+          "id": 207,
+          "modified": false,
+          "post": "zxc",
+        }
+      }
+    />
+    <div
+      className="delete-icon"
+      onClick={[Function]}
+    >
+      ✖
+    </div>
+  </div>
+  <div
+    className="text-section"
+  >
+    <p
+      className="note-text"
+    >
+      zxc
+    </p>
+    <p
+      className="timestamp"
+    >
+       
+      <span
+        className="created"
+      >
+        Created:
+      </span>
+        
+      Sun 9/6/20 5:24pm
+    </p>
+  </div>
+</div>
+`;

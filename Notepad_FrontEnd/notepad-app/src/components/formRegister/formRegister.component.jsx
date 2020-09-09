@@ -1,13 +1,9 @@
 import React from 'react';
 import './formRegister.styles.scss';
 import FormInput from '../formInput/formInput.component';
-import { Form, InputGroup, InputGroupAddon, InputGroupText, Input, Button } from 'reactstrap';
-import { connect } from 'react-redux';
-import { registerUserStart, clearUserFormError } from '../../redux/user/user.actions';
 import ValidationMessage from '../validationMessage/validationMessage.component';
-import  { selectUserErrorMessage } from '../../redux/user/user.selectors';
-import { createStructuredSelector } from 'reselect';
-import { withRouter } from 'react-router-dom';
+import { Form, InputGroup, InputGroupAddon, InputGroupText, Input, Button } from 'reactstrap';
+import { registerUserFailure } from '../../redux/user/user.actions';
 
 class FormRegister extends React.Component {
     constructor(props){
@@ -33,14 +29,18 @@ class FormRegister extends React.Component {
     handleOnSubmit(e) {
         e.preventDefault();
         const { email, password, name } = this.state;
-        const { registerUserStart } = this.props;
+        const { registerUserStart, registerUserFailure } = this.props;
         const finalEmail = email + this.state.emailDomain;
-        const registerInfo = {
-            name,
-            email: finalEmail,
-            password
+        if (name.length >= 2 || email.length >= 17 || password.length >= 5){
+            const registerInfo = {
+                name,
+                email: finalEmail,
+                password
+            }
+            registerUserStart(registerInfo);
+        } else {
+            registerUserFailure('Please Check Form Requirements')
         }
-        registerUserStart(registerInfo);
     }
 
     handleClickRouterLink() {
@@ -92,15 +92,4 @@ class FormRegister extends React.Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        registerUserStart: (credentials) => dispatch(registerUserStart(credentials)),
-        clearUserFormError: () => dispatch(clearUserFormError())
-    }
-}
-
-const mapStateToProps =  createStructuredSelector({
-    userErrorMessage: selectUserErrorMessage
-})
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FormRegister));
+export default FormRegister;

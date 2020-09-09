@@ -4,6 +4,7 @@ import { selectIsUserPostLoading } from '../../redux/posts/post.selectors';
 import NoteCard from './noteCard.component';
 import WithSpinner from '../withSpinner/withSpinner.component';
 
+
 const mapStateToProps = createStructuredSelector({
     isLoading: selectIsUserPostLoading
 })

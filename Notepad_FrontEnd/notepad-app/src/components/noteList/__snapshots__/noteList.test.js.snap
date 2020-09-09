@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Note List Component when user has more than one comments 1`] = `
+<div
+  className="NoteList"
+>
+  <h2
+    id="list-header"
+  >
+    Kimberly's Notes
+  </h2>
+  <div
+    className="container"
+  >
+    <div
+      className="row"
+      id="list-row"
+    >
+      <div
+        className="col-md-4 col-6 eachRow"
+        key="203"
+      >
+        <NoteCard
+          currentUser={
+            Object {
+              "comments": Array [
+                "1",
+              ],
+              "email": "kimberly@notepad.com",
+              "id": 75,
+              "joined": "2020-08-31T03:19:15.374Z",
+              "name": "kimberly",
+            }
+          }
+          getUserPostsStart={[Function]}
+          postData={
+            Object {
+              "created": "Sun 9/6/20 1:43am",
+              "id": 203,
+              "modified": true,
+              "post": "1",
+            }
+          }
+          userPosts={
+            Array [
+              Object {
+                "created": "Sun 9/6/20 1:43am",
+                "id": 203,
+                "modified": true,
+                "post": "1",
+              },
+            ]
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Form Register Tests Form Sign In SnapShot Test 1`] = `
+<div
+  className="FormRegister"
+>
+  <h3>
+    Register
+  </h3>
+  <Form
+    tag="form"
+  >
+    <FormInput
+      label="Name"
+      name="name"
+      onChange={[Function]}
+      placeholder="Name"
+      type="text"
+    />
+    <InputGroup
+      tag="div"
+    >
+      <Input
+        name="email"
+        onChange={[Function]}
+        placeholder="username"
+        type="text"
+      />
+      <InputGroupAddon
+        addonType="append"
+        tag="div"
+      >
+        <InputGroupText
+          tag="span"
+        >
+          @notepad.com
+        </InputGroupText>
+      </InputGroupAddon>
+    </InputGroup>
+    <FormInput
+      name="password"
+      onChange={[Function]}
+      placeholder="Create Password"
+      type="password"
+    />
+    <Button
+      className="mr-2"
+      color="secondary"
+      onClick={[Function]}
+      tag="button"
+    >
+      Register
+    </Button>
+    <Button
+      color="primary"
+      onClick={[Function]}
+      tag="button"
+    >
+      Sign In
+    </Button>
+  </Form>
+</div>
+`;

@@ -1,0 +1,11 @@
+.ErrorPage {
+    height: -webkit-calc(100vh - 63px);
+    background-color: #e0ece4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span {
+        color: #4e89ae;
+        cursor: pointer;
+    }
+}

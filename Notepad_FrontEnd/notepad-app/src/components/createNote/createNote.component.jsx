@@ -1,10 +1,10 @@
 import React from 'react';
 import './createNote.styles.scss';
 import CreateNoteModal from '../createNoteModal/createNoteModal.component';
-import { createPostStart } from '../../redux/posts/post.actions';
-import { connect } from 'react-redux';
-import { selectCurrentUser } from '../../redux/user/user.selectors'
-import { createStructuredSelector } from 'reselect';
+// import { createPostStart } from '../../redux/posts/post.actions';
+// import { connect } from 'react-redux';
+// import { selectCurrentUser } from '../../redux/user/user.selectors'
+// import { createStructuredSelector } from 'reselect';
 
 class CreateNote extends React.Component {
     constructor(props) {
@@ -37,20 +37,21 @@ class CreateNote extends React.Component {
     render() {
         return(
             <div className='CreateNote container'>
-                <CreateNoteModal buttonLabel='Create' onChange={this.handleOnChange} handleSubmit={this.handleSubmit}/>
+                <CreateNoteModal buttonLabel='Create' onChange={this.handleOnChange} handleSubmit={this.handleSubmit} id='createNote'/>
             </div>
         )
     } 
 }
 
-const mapDisptachToProps = (dispatch) => {
-    return {
-        createPostStart: (text) => dispatch(createPostStart(text))
-    }
-}
+// const mapDisptachToProps = (dispatch) => {
+//     return {
+//         createPostStart: (text) => dispatch(createPostStart(text))
+//     }
+// }
 
-const mapStateToProps = createStructuredSelector({
-    currentUser: selectCurrentUser
-})
+// const mapStateToProps = createStructuredSelector({
+//     currentUser: selectCurrentUser
+// })
 
-export default connect(mapStateToProps, mapDisptachToProps)(CreateNote);
+// export default connect(mapStateToProps, mapDisptachToProps)(CreateNote);
+export default CreateNote;

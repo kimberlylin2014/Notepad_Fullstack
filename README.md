@@ -13,6 +13,8 @@ https://youtu.be/vZ5eMu0eBXg
 * Reselect 
 * Redux Persist
 * Sass
+* Lazy Loading
+* Jest and Enzyme
 
 ### Backend
 * Node.js
@@ -36,6 +38,9 @@ https://youtu.be/vZ5eMu0eBXg
 * Memoize functions with the Reselect Library.
 * Implement React Router to build a single page application (SPA) without the page refreshing as the user navigates.
 * Redux Persist is utilized to persist the application states.
+* With Lazy Loading, the most critical components are loaded first, ultimately increasing the speed performance of the webpage.
+* Unit Testing with Jest and Enzyme
+
 
 ### Resources
 * This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

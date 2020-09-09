@@ -1,10 +1,5 @@
 import React from 'react';
 import './noteList.styles.scss';
-import { selectCurrentUser } from '../../redux/user/user.selectors';
-import { selectUserPosts } from '../../redux/posts/post.selectors'
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { getUserPostsStart } from '../../redux/posts/post.actions';
 import NoteCard from '../../components/noteCard/noteCard.component';
 
 class NoteList extends React.Component {
@@ -14,7 +9,6 @@ class NoteList extends React.Component {
 
     componentDidMount() {
         const { currentUser, getUserPostsStart } = this.props;
-        console.log(currentUser)
         if(currentUser.comments) {
             getUserPostsStart({currentUserID: currentUser.id})
         }   
@@ -26,12 +20,13 @@ class NoteList extends React.Component {
         const listHeader = userPosts.length === 0 ? "Add A Note!" : `${name}'s Notes`
         return(
             <div className='NoteList'>
-                <h2>{listHeader}</h2>
+                <h2 id='list-header'>{listHeader}</h2>
                 <div className='container'>
-                    <div className='row'>
-                        {userPosts ? userPosts.map(data =>  {
-                               return <div key={data.id} className='col-md-4 col-6 eachRow' >
-                                        <NoteCard postData={data}/>
+                    <div className='row' id='list-row'>
+                        {userPosts.length > 0 ? userPosts.map(postData =>  {
+                               return <div key={postData.id} className='col-md-4 col-6 eachRow' >
+                                        {console.log(postData)}
+                                        <NoteCard {...this.props} postData={postData}/>
                                       </div>
                          }) : ''}
                     </div>
@@ -41,14 +36,4 @@ class NoteList extends React.Component {
     }
 }
 
-const mapStateToProps = createStructuredSelector({
-    currentUser: selectCurrentUser,
-    userPosts: selectUserPosts
-});
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getUserPostsStart: (userID) => dispatch(getUserPostsStart(userID))
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(NoteList);
+export default NoteList;

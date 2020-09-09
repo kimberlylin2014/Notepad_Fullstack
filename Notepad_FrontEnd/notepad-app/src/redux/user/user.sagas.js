@@ -8,27 +8,16 @@ import { registerUserSuccess,
          updateCurrentUserSuccess, 
          updateCurrentUserFailure,
         } from './user.actions';
+import { fetchRegisterUser, fetchSignInUser } from './user.apis';
 
-function* registerUser({payload}) {    
+export function* registerUser({payload}) {    
     try {
-        const { email, name, password } = payload;
-        if (name.length < 2 || email.length < 17 || password.length < 5){
-            throw Error('Please Check Form Requirements');
+        const userData = yield fetchRegisterUser(fetch, payload);
+        if(userData) {
+            yield put(registerUserSuccess(userData));      
         } else {
-            const response = yield fetch('http://localhost:3000/register', 
-            {
-                method: "POST",
-                headers: {'Content-Type': "application/json"},
-                body: JSON.stringify(payload)
-            });
-            console.log(response)
-            if(response.ok) {
-                const user = yield response.json();
-                yield put(registerUserSuccess(user));    
-            } else {
-                throw Error('User already exists');
-            }    
-        }                
+            yield put(registerUserFailure("Please Check Form Requirements"))
+        }              
     } catch(error) {
         yield put(registerUserFailure(error.message))
     }
@@ -40,17 +29,13 @@ function* onUserRegisterStart() {
 
 function* signInUser({payload}) {
     try {
-        const response = yield fetch('http://localhost:3000/signin', {
-            method: "POST",
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(payload)
-        })
-        if(response.ok) {
-            const loggedInUser = yield response.json();
+        const loggedInUser = yield fetchSignInUser(fetch, payload)
+        if(loggedInUser) {
             yield put(signInUserSuccess(loggedInUser));
         } else {
-            throw Error('Wrong Credentials')
-        }     
+            yield put(signInUserFailure('Wrong Credentials'));
+        }
+        
     } catch(error) {
         yield put(signInUserFailure(error.message));
     }

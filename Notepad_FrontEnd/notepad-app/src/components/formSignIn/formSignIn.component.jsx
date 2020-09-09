@@ -1,13 +1,8 @@
 import React from 'react';
 import './formSignIn.styles.scss';
 import FormInput from '../formInput/formInput.component';
-import { Form, InputGroup, InputGroupAddon, InputGroupText, Input, Button } from 'reactstrap';
-import { connect } from 'react-redux';
-import { signInUserStart, clearUserFormError } from '../../redux/user/user.actions'
 import ValidationMessage from '../validationMessage/validationMessage.component';
-import { selectUserErrorMessage } from '../../redux/user/user.selectors';
-import { createStructuredSelector } from 'reselect'; 
-import { withRouter } from 'react-router-dom';
+import { Form, InputGroup, InputGroupAddon, InputGroupText, Input, Button } from 'reactstrap';
 
 class FormSignIn extends React.Component {
     constructor(props){
@@ -69,7 +64,7 @@ class FormSignIn extends React.Component {
                     (<ValidationMessage color='#ec0101'>
                          <p>{userErrorMessage}</p> 
                     </ValidationMessage>) : ""}
-                    <Button color="secondary" className='mr-2' onClick={this.handleOnSubmit}>Sign In</Button>
+                    <Button color="secondary" className='mr-2' onClick={this.handleOnSubmit} id='signIn-click'>Sign In</Button>
                     <Button color="primary" onClick={this.handleClickRouterLink}>Register</Button>
                 </ Form>
 
@@ -78,15 +73,4 @@ class FormSignIn extends React.Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        signInUserStart: (credentials) => dispatch(signInUserStart(credentials)),
-        clearUserFormError: () => dispatch(clearUserFormError())
-    }
-}
-
-const mapStateToProps = createStructuredSelector({
-    userErrorMessage: selectUserErrorMessage
-})
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FormSignIn));
+export default FormSignIn;
